@@ -33,8 +33,9 @@ jobs:
             'accounts:' \
             '- name: hubspot' \
             "  accountId: $PORTAL_ID" \
-            '  authType: privateApp' \
-            "  token: $HUBSPOT_ACCESS_TOKEN" \
+            '  authType: personalaccesskey' \
+            '  auth:' \
+            "    personalAccessKey: $HUBSPOT_ACCESS_TOKEN" \
             "  portalId: $PORTAL_ID" \
             > $HOME/hubspot.config.yml
 
