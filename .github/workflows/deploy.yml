@@ -32,6 +32,7 @@ jobs:
             'defaultAccount: hubspot' \
             'accounts:' \
             '- name: hubspot' \
+            "  accountId: $PORTAL_ID" \
             '  authType: privateApp' \
             "  token: $HUBSPOT_ACCESS_TOKEN" \
             "  portalId: $PORTAL_ID" \
