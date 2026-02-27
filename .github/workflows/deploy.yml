@@ -5,25 +5,50 @@ on:
     branches:
       - main
 
-env:
-  # Official action reads these; use your existing secrets (PORTAL_ID = account ID)
-  DEFAULT_ACCOUNT_ID: ${{ secrets.PORTAL_ID }}
-  DEFAULT_PERSONAL_ACCESS_KEY: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
-  # Use CLI v7: v8 with --use-env treats PAK as OAuth refresh token and fails
-  DEFAULT_CLI_VERSION: "7"
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install HubSpot CLI
+        run: npm install -g @hubspot/cli@7
+
       - name: Check secrets
         run: |
           if [ -z "${{ secrets.HUBSPOT_ACCESS_TOKEN }}" ]; then echo "::error::HUBSPOT_ACCESS_TOKEN secret is not set"; exit 1; fi
           if [ -z "${{ secrets.PORTAL_ID }}" ]; then echo "::error::PORTAL_ID secret is not set"; exit 1; fi
 
-      - name: HubSpot Project Upload
-        uses: HubSpot/hubspot-project-actions/project-upload@v1.1.0
-        with:
-          debug: true
+      - name: Create HubSpot config
+        env:
+          HUBSPOT_ACCESS_TOKEN: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
+          PORTAL_ID: ${{ secrets.PORTAL_ID }}
+        run: |
+          mkdir -p "$HOME/.hscli"
+          EXPIRES_AT_MS=4102444799999
+          {
+            echo "defaultPortal: hubspot"
+            echo "portals:"
+            echo "- name: hubspot"
+            echo "  accountId: $PORTAL_ID"
+            echo "  portalId: $PORTAL_ID"
+            echo "  authType: personalaccesskey"
+            echo "  personalAccessKey: $HUBSPOT_ACCESS_TOKEN"
+            echo "  tokenInfo:"
+            echo "    accessToken: $HUBSPOT_ACCESS_TOKEN"
+            echo "    expiresAt: $EXPIRES_AT_MS"
+            echo "  auth:"
+            echo "    personalAccessKey: $HUBSPOT_ACCESS_TOKEN"
+            echo "    tokenInfo:"
+            echo "      accessToken: $HUBSPOT_ACCESS_TOKEN"
+            echo "      expiresAt: $EXPIRES_AT_MS"
+          } > "$HOME/.hscli/config.yml"
+
+      # Note: If you see "Failed to fetch schemas", the CLI needs schema access. The scope
+      # crm.schemas.custom.read is not available for all accounts. See DEPLOY.md for workarounds.
+      - name: Upload and deploy HubSpot Project
+        run: cd "$GITHUB_WORKSPACE" && hs project upload
