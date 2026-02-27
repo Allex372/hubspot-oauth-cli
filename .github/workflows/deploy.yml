@@ -17,10 +17,8 @@ jobs:
       - name: Install HubSpot CLI
         run: npm install -g @hubspot/cli
 
-      # 3. Авторизуємося через Personal Access Key
-      - name: Authenticate HubSpot CLI
-        run: hs auth personalaccesskey ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
-
-      # 4. Завантажуємо проєкт у HubSpot
+      # 3. Завантажуємо проєкт у HubSpot
       - name: Upload project
         run: hs project upload --portal-id ${{ secrets.PORTAL_ID }}
+        env:
+          HUBSPOT_ACCESS_TOKEN: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
