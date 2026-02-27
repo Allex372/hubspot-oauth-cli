@@ -66,6 +66,8 @@ jobs:
           } > "$GITHUB_WORKSPACE/hubspot.config.yml"
 
       - name: Upload and deploy HubSpot Project
-        run: hs project upload
+        run: hs project upload --use-env
         env:
           HUBSPOT_ACCESS_TOKEN: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
+          HUBSPOT_PORTAL_ID: ${{ secrets.PORTAL_ID }}
+          PORTAL_ID: ${{ secrets.PORTAL_ID }}
