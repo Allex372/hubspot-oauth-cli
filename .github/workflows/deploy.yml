@@ -10,15 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Клон репозиторію
       - uses: actions/checkout@v3
 
-      # 2. Встановлюємо HubSpot CLI
       - name: Install HubSpot CLI
         run: npm install -g @hubspot/cli
 
-      # 3. Завантажуємо проект
-      - name: Upload project
-        run: hs project upload --overwrite
+      - name: Deploy HubSpot Project
+        run: hs project deploy
         env:
           HUBSPOT_ACCESS_TOKEN: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
