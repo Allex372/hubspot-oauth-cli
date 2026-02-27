@@ -49,5 +49,8 @@ jobs:
             echo "      expiresAt: $EXPIRES_AT_MS"
           } > "$HOME/.hscli/config.yml"
 
+      - name: Validate HubSpot Project
+        run: cd "$GITHUB_WORKSPACE" && hs project validate
+
       - name: Upload and deploy HubSpot Project
-        run: cd "$GITHUB_WORKSPACE" && hs project upload
+        run: cd "$GITHUB_WORKSPACE" && hs project upload --debug
