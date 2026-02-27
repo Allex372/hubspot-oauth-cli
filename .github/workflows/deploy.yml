@@ -15,8 +15,9 @@ jobs:
         with:
           node-version: "20"
 
+      # Try 7.4.0: older version may skip schema fetch that fails without crm.schemas.custom.read
       - name: Install HubSpot CLI
-        run: npm install -g @hubspot/cli@7
+        run: npm install -g @hubspot/cli@7.4.0
 
       - name: Check secrets
         run: |
