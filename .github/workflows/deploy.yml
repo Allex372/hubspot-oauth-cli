@@ -48,8 +48,18 @@ jobs:
           } > "$GITHUB_WORKSPACE/hubspot.config.yml"
 
       - name: Upload and deploy HubSpot Project
-        run: hs project upload --use-env
+        working-directory: ${{ github.workspace }}
         env:
           HUBSPOT_ACCESS_TOKEN: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
           HUBSPOT_PORTAL_ID: ${{ secrets.PORTAL_ID }}
           PORTAL_ID: ${{ secrets.PORTAL_ID }}
+        run: |
+          {
+            echo "defaultAccount: hubspot"
+            echo "accounts:"
+            echo "- name: hubspot"
+            echo "  accountId: $PORTAL_ID"
+            echo "  portalId: $PORTAL_ID"
+            echo "  authType: personalaccesskey"
+          } > hubspot.config.yml
+          hs project upload --use-env
