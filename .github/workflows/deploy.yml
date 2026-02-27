@@ -31,10 +31,10 @@ jobs:
             'assetsDir: assets' \
             'defaultAccount: hubspot' \
             'accounts:' \
-            '  hubspot:' \
-            '    authType: privateApp' \
-            "    token: $HUBSPOT_ACCESS_TOKEN" \
-            "    portalId: $PORTAL_ID" \
+            '- name: hubspot' \
+            '  authType: privateApp' \
+            "  token: $HUBSPOT_ACCESS_TOKEN" \
+            "  portalId: $PORTAL_ID" \
             > $HOME/hubspot.config.yml
 
       - name: Deploy HubSpot Project
