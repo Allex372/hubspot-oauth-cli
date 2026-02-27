@@ -5,50 +5,24 @@ on:
     branches:
       - main
 
+env:
+  # Official action reads these; use your existing secrets (PORTAL_ID = account ID)
+  DEFAULT_ACCOUNT_ID: ${{ secrets.PORTAL_ID }}
+  DEFAULT_PERSONAL_ACCESS_KEY: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
+  DEFAULT_CLI_VERSION: "8.0.0"
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Install HubSpot CLI
-        run: npm install -g @hubspot/cli@7
-
-      - name: Check HubSpot secrets
+      - name: Check secrets
         run: |
           if [ -z "${{ secrets.HUBSPOT_ACCESS_TOKEN }}" ]; then echo "::error::HUBSPOT_ACCESS_TOKEN secret is not set"; exit 1; fi
           if [ -z "${{ secrets.PORTAL_ID }}" ]; then echo "::error::PORTAL_ID secret is not set"; exit 1; fi
 
-      - name: Create HubSpot config
-        env:
-          HUBSPOT_ACCESS_TOKEN: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
-          PORTAL_ID: ${{ secrets.PORTAL_ID }}
-        run: |
-          mkdir -p "$HOME/.hscli"
-          EXPIRES_AT_MS=4102444799999
-          {
-            echo "defaultPortal: hubspot"
-            echo "portals:"
-            echo "- name: hubspot"
-            echo "  accountId: $PORTAL_ID"
-            echo "  portalId: $PORTAL_ID"
-            echo "  authType: personalaccesskey"
-            echo "  personalAccessKey: $HUBSPOT_ACCESS_TOKEN"
-            echo "  tokenInfo:"
-            echo "    accessToken: $HUBSPOT_ACCESS_TOKEN"
-            echo "    expiresAt: $EXPIRES_AT_MS"
-            echo "  auth:"
-            echo "    personalAccessKey: $HUBSPOT_ACCESS_TOKEN"
-            echo "    tokenInfo:"
-            echo "      accessToken: $HUBSPOT_ACCESS_TOKEN"
-            echo "      expiresAt: $EXPIRES_AT_MS"
-          } > "$HOME/.hscli/config.yml"
-
-      # If you see "Failed to fetch schemas", add scope crm.schemas.custom.read (or crm.objects.custom.read) to your PAK
-      - name: Upload and deploy HubSpot Project
-        run: cd "$GITHUB_WORKSPACE" && hs project upload --debug
+      - name: HubSpot Project Upload
+        uses: HubSpot/hubspot-project-actions/project-upload@v1.1.0
+        with:
+          debug: true
