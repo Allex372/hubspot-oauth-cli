@@ -1,11 +1,17 @@
 # Deploying this project
 
+## Before you start (HubSpot)
+
+- **Disable old GitHub integration** (if you used it before): In HubSpot go to **Settings → Tools → Developer Projects** and turn off the built-in GitHub integration. Using our workflow or the official HubSpot project action avoids conflicts.
+
 ## CI/CD (GitHub Actions)
 
-The workflow in `.github/workflows/deploy.yml` runs on push to `main`. It uses a **Personal Access Key** (PAK) from GitHub secrets:
+**Don’t commit `hubspot.config.yml`** — it would contain your token. HubSpot recommends using **environment variables** and **`hs project upload --use-env`** so the CLI reads auth from `HUBSPOT_ACCOUNT_ID` and `HUBSPOT_PERSONAL_ACCESS_KEY`. In practice, with current CLI versions, `--use-env` often fails (“No config file found” or “refresh token was malformed” when using a PAK). So this repo **builds `hubspot.config.yml` in the workflow** from GitHub secrets and then runs `hs project upload` (no `--use-env`). The file exists only in the runner and is never committed.
+
+**Secrets to set** (GitHub → Settings → Secrets and variables → Actions):
 
 - `HUBSPOT_ACCESS_TOKEN` – your HubSpot Personal Access Key  
-- `PORTAL_ID` – your HubSpot account (portal) ID  
+- `PORTAL_ID` – your HubSpot account ID (use `HUBSPOT_ACCOUNT_ID` as the value if you prefer; the workflow uses it as account ID)  
 
 ### If you see "Failed to fetch schemas"
 
@@ -37,3 +43,7 @@ hs project upload
 ```
 
 Use the same PAK (with the scopes you use in the app) so upload and schema fetch succeed.
+
+## Official HubSpot Project Action (alternative)
+
+You can also use the [official HubSpot project action](https://github.com/HubSpot/hubspot-project-actions) with `account_id` and `personal_access_key` inputs (secrets: e.g. `PORTAL_ID` → account_id, `HUBSPOT_ACCESS_TOKEN` → personal_access_key). If you see **"refresh token was malformed"**, the action’s `--use-env` path doesn’t work with PAK in current CLI versions; keep using the manual workflow in this repo instead.

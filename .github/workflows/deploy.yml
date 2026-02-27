@@ -1,3 +1,5 @@
+# Deploy HubSpot Developer Project (marketplace app) on push to main.
+# Uses hs project upload — not HubSpot CMS Deploy Action (that one is for Design Manager themes, not developer projects).
 name: Deploy HubSpot Marketplace App
 
 on:
@@ -32,8 +34,8 @@ jobs:
           mkdir -p "$HOME/.hscli"
           EXPIRES_AT_MS=4102444799999
           {
-            echo "defaultPortal: hubspot"
-            echo "portals:"
+            echo "defaultAccount: hubspot"
+            echo "accounts:"
             echo "- name: hubspot"
             echo "  accountId: $PORTAL_ID"
             echo "  portalId: $PORTAL_ID"
