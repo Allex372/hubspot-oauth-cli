@@ -19,11 +19,17 @@ jobs:
       - name: Install HubSpot CLI
         run: npm install -g @hubspot/cli
 
+      - name: Check HubSpot secrets
+        run: |
+          if [ -z "${{ secrets.HUBSPOT_ACCESS_TOKEN }}" ]; then echo "::error::HUBSPOT_ACCESS_TOKEN secret is not set"; exit 1; fi
+          if [ -z "${{ secrets.PORTAL_ID }}" ]; then echo "::error::PORTAL_ID secret is not set"; exit 1; fi
+
       - name: Create HubSpot config
         env:
           HUBSPOT_ACCESS_TOKEN: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
           PORTAL_ID: ${{ secrets.PORTAL_ID }}
         run: |
+          EXPIRES_AT="2099-12-31T23:59:59.000Z"
           printf '%s\n' \
             'projectName: hubspot-oauth-cli' \
             'srcDir: src' \
@@ -39,7 +45,7 @@ jobs:
             '  auth:' \
             '    tokenInfo:' \
             "      accessToken: $HUBSPOT_ACCESS_TOKEN" \
-            "      expiresAt: '2099-01-01T00:00:00.000Z'" \
+            "      expiresAt: \"$EXPIRES_AT\"" \
             > $HOME/hubspot.config.yml
 
       - name: Deploy HubSpot Project
