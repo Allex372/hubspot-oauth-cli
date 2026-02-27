@@ -30,8 +30,8 @@ jobs:
           PORTAL_ID: ${{ secrets.PORTAL_ID }}
         run: |
           mkdir -p "$HOME/.hscli"
-          # CLI may expect expiresAt as ms since epoch (2099-12-31)
           EXPIRES_AT_MS=4102444799999
+          # Global config (~/.hscli/config.yml)
           {
             echo "defaultPortal: hubspot"
             echo "portals:"
@@ -46,8 +46,23 @@ jobs:
             echo "      accessToken: $HUBSPOT_ACCESS_TOKEN"
             echo "      expiresAt: $EXPIRES_AT_MS"
           } > "$HOME/.hscli/config.yml"
+          # Project config (so deploy finds auth when run from repo root)
+          {
+            echo "defaultAccount: hubspot"
+            echo "accounts:"
+            echo "- name: hubspot"
+            echo "  accountId: $PORTAL_ID"
+            echo "  portalId: $PORTAL_ID"
+            echo "  authType: personalaccesskey"
+            echo "  personalAccessKey: $HUBSPOT_ACCESS_TOKEN"
+            echo "  auth:"
+            echo "    personalAccessKey: $HUBSPOT_ACCESS_TOKEN"
+            echo "    tokenInfo:"
+            echo "      accessToken: $HUBSPOT_ACCESS_TOKEN"
+            echo "      expiresAt: $EXPIRES_AT_MS"
+          } > "$GITHUB_WORKSPACE/hubspot.config.yml"
 
       - name: Deploy HubSpot Project
-        run: hs project deploy
+        run: hs project deploy --debug
         env:
           HUBSPOT_ACCESS_TOKEN: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
