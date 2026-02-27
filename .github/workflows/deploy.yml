@@ -17,7 +17,7 @@ jobs:
           node-version: '20'
 
       - name: Install HubSpot CLI
-        run: npm install -g @hubspot/cli
+        run: npm install -g @hubspot/cli@7
 
       - name: Check HubSpot secrets
         run: |
@@ -50,11 +50,11 @@ jobs:
       - name: Upload and deploy HubSpot Project
         env:
           HUBSPOT_ACCESS_TOKEN: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
-          HUBSPOT_ACCOUNT_ID: ${{ secrets.PORTAL_ID }}
+          HUBSPOT_PORTAL_ID: ${{ secrets.PORTAL_ID }}
           PORTAL_ID: ${{ secrets.PORTAL_ID }}
         run: |
           mkdir -p "$HOME/.hscli"
-          printf 'defaultPortal: hubspot\nportals:\n- name: hubspot\n  accountId: %s\n  portalId: %s\n  authType: personalaccesskey\n' "$HUBSPOT_ACCOUNT_ID" "$HUBSPOT_ACCOUNT_ID" > "$HOME/.hscli/config.yml"
-          printf 'defaultAccount: hubspot\naccounts:\n- name: hubspot\n  accountId: %s\n  portalId: %s\n  authType: personalaccesskey\n' "$HUBSPOT_ACCOUNT_ID" "$HUBSPOT_ACCOUNT_ID" > "$GITHUB_WORKSPACE/hubspot.config.yml"
+          printf 'defaultPortal: hubspot\nportals:\n- name: hubspot\n  accountId: %s\n  portalId: %s\n  authType: personalaccesskey\n' "$PORTAL_ID" "$PORTAL_ID" > "$HOME/.hscli/config.yml"
+          printf 'defaultAccount: hubspot\naccounts:\n- name: hubspot\n  accountId: %s\n  portalId: %s\n  authType: personalaccesskey\n' "$PORTAL_ID" "$PORTAL_ID" > "$GITHUB_WORKSPACE/hubspot.config.yml"
           cd "$GITHUB_WORKSPACE"
           hs project upload --use-env
