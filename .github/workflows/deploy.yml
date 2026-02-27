@@ -10,19 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Клон репозиторію
       - uses: actions/checkout@v3
 
-      # 2. Встановлюємо Node.js (якщо потрібно для CLI)
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      # 3. Встановлюємо HubSpot CLI
       - name: Install HubSpot CLI
         run: npm install -g @hubspot/cli
 
-      # 4. Деплой проекту
       - name: Deploy HubSpot Project
         run: hs project deploy
         env:
