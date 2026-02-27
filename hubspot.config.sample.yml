@@ -1,0 +1,13 @@
+# Copy to hubspot.config.yml and fill in your values (do not commit).
+# For CI, the workflow creates the config from GitHub Actions secrets.
+projectName: hubspot-oauth-cli
+srcDir: src
+templatesDir: templates
+assetsDir: assets
+defaultAccount: hubspot
+accounts:
+  - name: hubspot
+    accountId: YOUR_PORTAL_ID
+    authType: personalaccesskey
+    personalAccessKey: YOUR_PERSONAL_ACCESS_KEY
+    portalId: YOUR_PORTAL_ID

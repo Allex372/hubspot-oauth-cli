@@ -1,0 +1,5 @@
+# HubSpot config with secrets — use GitHub Actions secrets for CI
+hubspot.config.yml
+
+# Dependencies and build
+node_modules/
