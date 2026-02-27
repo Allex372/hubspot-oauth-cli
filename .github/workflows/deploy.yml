@@ -17,8 +17,8 @@ jobs:
       - name: Install HubSpot CLI
         run: npm install -g @hubspot/cli
 
-      # 3. Завантажуємо проєкт у HubSpot
+      # 3. Завантажуємо проект
       - name: Upload project
-        run: hs project upload --portal-id ${{ secrets.PORTAL_ID }}
+        run: hs project upload --overwrite
         env:
           HUBSPOT_ACCESS_TOKEN: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
