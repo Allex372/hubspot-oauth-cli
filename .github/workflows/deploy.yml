@@ -1,4 +1,4 @@
-name: Deploy to HubSpot
+name: Deploy HubSpot Marketplace App
 
 on:
   push:
@@ -8,10 +8,18 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy HubSpot project
-        uses: HubSpot/hubspot-project-actions@v2 # Use the official action
+
+      - uses: actions/setup-node@v3
         with:
-          accountId: ${{ secrets.HUBSPOT_ACCOUNT_ID }}
-          personalAccessKey: ${{ secrets.HUBSPOT_PERSONAL_ACCESS_KEY }}
+          node-version: '18'
+
+      - name: Install HubSpot CLI
+        run: npm install -g @hubspot/cli
+
+      - name: Deploy HubSpot Project
+        run: hs project deploy
+        env:
+          HUBSPOT_ACCESS_TOKEN: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
