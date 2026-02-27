@@ -16,8 +16,8 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install HubSpot CLI
-        run: npm install -g @hubspot/cli
+      - name: Install HubSpot CLI v3
+        run: npm install -g @hubspot/cli@3
 
       - name: Upload HubSpot Project
         run: hs upload ./src
