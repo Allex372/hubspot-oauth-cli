@@ -38,6 +38,7 @@ jobs:
             echo "  accountId: $PORTAL_ID"
             echo "  portalId: $PORTAL_ID"
             echo "  authType: personalaccesskey"
+            echo "  personalAccessKey: $HUBSPOT_ACCESS_TOKEN"
             echo "  auth:"
             echo "    personalAccessKey: $HUBSPOT_ACCESS_TOKEN"
             echo "    tokenInfo:"
