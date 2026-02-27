@@ -1,9 +1,0 @@
-projectName: hubspot-oauth-cli
-srcDir: src
-templatesDir: templates
-assetsDir: assets
-defaultAccount: hubspot
-accounts:
-  hubspot:
-    authType: privateApp
-    token: $HUBSPOT_ACCESS_TOKEN
