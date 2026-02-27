@@ -34,8 +34,7 @@ jobs:
             '- name: hubspot' \
             "  accountId: $PORTAL_ID" \
             '  authType: personalaccesskey' \
-            '  auth:' \
-            "    personalAccessKey: $HUBSPOT_ACCESS_TOKEN" \
+            "  personalAccessKey: $HUBSPOT_ACCESS_TOKEN" \
             "  portalId: $PORTAL_ID" \
             > $HOME/hubspot.config.yml
 
