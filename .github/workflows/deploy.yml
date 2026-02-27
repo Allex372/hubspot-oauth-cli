@@ -1,0 +1,26 @@
+name: Deploy HubSpot Marketplace App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Клон репозиторію
+      - uses: actions/checkout@v3
+
+      # 2. Встановлюємо HubSpot CLI
+      - name: Install HubSpot CLI
+        run: npm install -g @hubspot/cli
+
+      # 3. Авторизуємося через Personal Access Key
+      - name: Authenticate HubSpot CLI
+        run: hs auth personalaccesskey ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
+
+      # 4. Завантажуємо проєкт у HubSpot
+      - name: Upload project
+        run: hs project upload --portal-id ${{ secrets.PORTAL_ID }}
