@@ -36,6 +36,10 @@ jobs:
             '  authType: personalaccesskey' \
             "  personalAccessKey: $HUBSPOT_ACCESS_TOKEN" \
             "  portalId: $PORTAL_ID" \
+            '  auth:' \
+            '    tokenInfo:' \
+            "      accessToken: $HUBSPOT_ACCESS_TOKEN" \
+            "      expiresAt: '2099-01-01T00:00:00.000Z'" \
             > $HOME/hubspot.config.yml
 
       - name: Deploy HubSpot Project
