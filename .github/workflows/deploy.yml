@@ -31,7 +31,7 @@ jobs:
         run: |
           mkdir -p "$HOME/.hscli"
           EXPIRES_AT_MS=4102444799999
-          # Global config (~/.hscli/config.yml)
+          # Global config (~/.hscli/config.yml) — CLI only reads this for project deploy
           {
             echo "defaultPortal: hubspot"
             echo "portals:"
@@ -40,6 +40,9 @@ jobs:
             echo "  portalId: $PORTAL_ID"
             echo "  authType: personalaccesskey"
             echo "  personalAccessKey: $HUBSPOT_ACCESS_TOKEN"
+            echo "  tokenInfo:"
+            echo "    accessToken: $HUBSPOT_ACCESS_TOKEN"
+            echo "    expiresAt: $EXPIRES_AT_MS"
             echo "  auth:"
             echo "    personalAccessKey: $HUBSPOT_ACCESS_TOKEN"
             echo "    tokenInfo:"
