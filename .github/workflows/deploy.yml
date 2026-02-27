@@ -9,7 +9,8 @@ env:
   # Official action reads these; use your existing secrets (PORTAL_ID = account ID)
   DEFAULT_ACCOUNT_ID: ${{ secrets.PORTAL_ID }}
   DEFAULT_PERSONAL_ACCESS_KEY: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
-  DEFAULT_CLI_VERSION: "8.0.0"
+  # Use CLI v7: v8 with --use-env treats PAK as OAuth refresh token and fails
+  DEFAULT_CLI_VERSION: "7"
 
 jobs:
   deploy:
