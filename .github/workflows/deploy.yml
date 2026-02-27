@@ -29,24 +29,21 @@ jobs:
           HUBSPOT_ACCESS_TOKEN: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
           PORTAL_ID: ${{ secrets.PORTAL_ID }}
         run: |
+          mkdir -p "$HOME/.hscli"
           EXPIRES_AT="2099-12-31T23:59:59.000Z"
-          printf '%s\n' \
-            'projectName: hubspot-oauth-cli' \
-            'srcDir: src' \
-            'templatesDir: templates' \
-            'assetsDir: assets' \
-            'defaultAccount: hubspot' \
-            'accounts:' \
-            '- name: hubspot' \
-            "  accountId: $PORTAL_ID" \
-            '  authType: personalaccesskey' \
-            "  personalAccessKey: $HUBSPOT_ACCESS_TOKEN" \
-            "  portalId: $PORTAL_ID" \
-            '  auth:' \
-            '    tokenInfo:' \
-            "      accessToken: $HUBSPOT_ACCESS_TOKEN" \
-            "      expiresAt: \"$EXPIRES_AT\"" \
-            > $HOME/hubspot.config.yml
+          {
+            echo "defaultPortal: hubspot"
+            echo "portals:"
+            echo "- name: hubspot"
+            echo "  accountId: $PORTAL_ID"
+            echo "  portalId: $PORTAL_ID"
+            echo "  authType: personalaccesskey"
+            echo "  auth:"
+            echo "    personalAccessKey: $HUBSPOT_ACCESS_TOKEN"
+            echo "    tokenInfo:"
+            echo "      accessToken: $HUBSPOT_ACCESS_TOKEN"
+            echo "      expiresAt: $EXPIRES_AT"
+          } > "$HOME/.hscli/config.yml"
 
       - name: Deploy HubSpot Project
         run: hs project deploy
