@@ -65,7 +65,7 @@ jobs:
             echo "      expiresAt: $EXPIRES_AT_MS"
           } > "$GITHUB_WORKSPACE/hubspot.config.yml"
 
-      - name: Deploy HubSpot Project
-        run: hs project deploy --debug
+      - name: Upload and deploy HubSpot Project
+        run: hs project upload
         env:
           HUBSPOT_ACCESS_TOKEN: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
