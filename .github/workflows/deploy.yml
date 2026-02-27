@@ -10,35 +10,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Клон репозиторію
       - uses: actions/checkout@v3
 
-      # 2. Встановлюємо Node.js (для HubSpot CLI)
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      # 3. Встановлюємо HubSpot CLI v3
       - name: Install HubSpot CLI
-        run: npm install -g @hubspot/cli@3
+        run: npm install -g @hubspot/cli
 
-      # 4. Створюємо hubspot.config.yml на runner
       - name: Create HubSpot config
         run: |
-          echo "accounts:
-            hubspot:
-              authType: privateApp
-              token: $HUBSPOT_ACCESS_TOKEN
-          defaultAccount: hubspot
-          projectName: hubspot-oauth-cli
-          srcDir: src
-          templatesDir: templates
-          assetsDir: assets" > $HOME/hubspot.config.yml
+          echo "projectName: hubspot-oauth-cli
+srcDir: src
+templatesDir: templates
+assetsDir: assets
+defaultAccount: hubspot
+accounts:
+  hubspot:
+    authType: privateApp
+    token: $HUBSPOT_ACCESS_TOKEN
+    portalId: $PORTAL_ID" > $HOME/hubspot.config.yml
         env:
           HUBSPOT_ACCESS_TOKEN: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
+          PORTAL_ID: ${{ secrets.PORTAL_ID }}
 
-      # 5. Завантажуємо проект у HubSpot
-      - name: Upload HubSpot Project
-        run: hs upload ./src /
+      - name: Deploy HubSpot Project
+        run: hs project deploy
         env:
           HUBSPOT_ACCESS_TOKEN: ${{ secrets.HUBSPOT_ACCESS_TOKEN }}
