@@ -14,7 +14,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install HubSpot CLI
         run: npm install -g @hubspot/cli
@@ -30,7 +30,8 @@ jobs:
           PORTAL_ID: ${{ secrets.PORTAL_ID }}
         run: |
           mkdir -p "$HOME/.hscli"
-          EXPIRES_AT="2099-12-31T23:59:59.000Z"
+          # CLI may expect expiresAt as ms since epoch (2099-12-31)
+          EXPIRES_AT_MS=4102444799999
           {
             echo "defaultPortal: hubspot"
             echo "portals:"
@@ -43,7 +44,7 @@ jobs:
             echo "    personalAccessKey: $HUBSPOT_ACCESS_TOKEN"
             echo "    tokenInfo:"
             echo "      accessToken: $HUBSPOT_ACCESS_TOKEN"
-            echo "      expiresAt: $EXPIRES_AT"
+            echo "      expiresAt: $EXPIRES_AT_MS"
           } > "$HOME/.hscli/config.yml"
 
       - name: Deploy HubSpot Project
