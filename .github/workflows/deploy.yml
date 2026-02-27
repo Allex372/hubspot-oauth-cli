@@ -49,6 +49,6 @@ jobs:
             echo "      expiresAt: $EXPIRES_AT_MS"
           } > "$HOME/.hscli/config.yml"
 
-      # Personal Access Key must include scope to fetch schemas, e.g. crm.schemas.custom.read or crm.objects.custom.read
+      # If you see "Failed to fetch schemas", add scope crm.schemas.custom.read (or crm.objects.custom.read) to your PAK
       - name: Upload and deploy HubSpot Project
-        run: cd "$GITHUB_WORKSPACE" && hs project upload
+        run: cd "$GITHUB_WORKSPACE" && hs project upload --debug
